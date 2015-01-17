@@ -1,0 +1,1 @@
+This app will take almost any stock ticker symbol, find the last 10 articles on that stock, and based on the sentiment in those articles, it will tell you whether to buy, wait, or sell. As of now, it is mostly working but can be slow and has a few bugs. I am currently testing it and working on tweaking the settings to get more accurate sentiment based recommendations.
