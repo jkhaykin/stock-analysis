@@ -1,0 +1,54 @@
+<head>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:600' rel='stylesheet' type='text/css'>
+<script src="//code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+</head>
+
+<style>
+body {
+	font-family: 'Open Sans', sans-serif;
+}
+</style>
+
+<form method="get" action="/stocks">
+<input name="q" value="">
+<input type="submit">
+</form>
+
+<% if @json.include?(params[:q]) == true %>
+	<h1><%= params[:q] %></h1>
+	<div id="price">
+	<% @data.css("#price-panel").each do |stock| %>
+		<h1>$<%= stock.css(".pr") %></h1>
+		<h3><%= stock.css(".ch") %></h3>
+	<% end %>
+	</div>
+	<% @rss = SimpleRSS.parse open("https://www.google.com/finance/company_news?q=#{params[:q]}&output=rss") %>
+	<div id ="news">
+	<ol>
+	<% count = 0 %>
+	<% @rss.items.each do |article| %>
+		<li><a href="<%= article.link %>"><%= article.title %></a></li>
+		<% @news = Nokogiri::HTML(open("#{article.link}")) %>
+		<% hash = {:sentiment => "#{@analyzer.get_sentiment "#{@news.css("p")}"}"} %>
+		<% if hash[:sentiment].include?("positive") %>
+					<% count += 1 %>	
+		<% elsif hash[:sentiment].include?("neutral") %>
+					<% count += 0 %>
+		<% elsif hash[:sentiment].include?("negative") %>
+					<% count -= 1 %>	
+		<% end %>
+	<% end %>
+	<h1>Based on the sentiment in the articles above, we predict you should:</h1>
+		<% if count == 2 %>
+			<h1 style="color:orange;">WAIT!</h1>
+		<% elsif count > 2 %>
+			<h1 style="color:green">BUY NOW!</h1>
+		<% elsif count < 2 %>
+			<h1 style="color:red">SELL NOW!</h1>
+		<% end %>
+	</ol>
+	</div>
+<% else %>
+	<p>Sorry, we couldn't find your stock. Please try your search again.</p>
+<% end %>
