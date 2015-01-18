@@ -30,6 +30,8 @@ body {
 	<% @rss.items.each do |article| %>
 		<li><a href="<%= article.link %>"><%= article.title %></a></li>
 		<% @news = Nokogiri::HTML(open("#{article.link}")) %>
+		<%= @analyzer.get_score "#{@news.css("p")}" %>
+		<%= @analyzer.get_sentiment "#{@news.css("p")}" %>
 		<% hash = {:sentiment => "#{@analyzer.get_sentiment "#{@news.css("p")}"}"} %>
 		<% if hash[:sentiment].include?("positive") %>
 					<% count += 1 %>	
