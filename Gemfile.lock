@@ -1,0 +1,32 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    httparty (0.13.3)
+      json (~> 1.8)
+      multi_xml (>= 0.5.2)
+    json (1.8.2)
+    mini_portile (0.6.2)
+    multi_xml (0.5.5)
+    nokogiri (1.6.5)
+      mini_portile (~> 0.6.0)
+    rack (1.6.0)
+    rack-protection (1.5.3)
+      rack
+    sentimental (1.0.3)
+    simple-rss (1.3.1)
+    sinatra (1.4.5)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
+    tilt (1.4.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  httparty
+  json
+  nokogiri
+  sentimental
+  simple-rss
+  sinatra
