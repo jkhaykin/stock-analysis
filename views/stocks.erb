@@ -14,22 +14,19 @@ body {
 <input name="q" value="">
 <input type="submit">
 </form>
-
-<% if @json.include?(params[:q]) == true %>
-	<h1><%= params[:q] %></h1>
 	<div id="price">
 	<% @data.css("#price-panel").each do |stock| %>
 		<h1>$<%= stock.css(".pr") %></h1>
 		<h3><%= stock.css(".ch") %></h3>
 	<% end %>
 	</div>
-	<% @rss = SimpleRSS.parse open("https://www.google.com/finance/company_news?q=#{params[:q]}&output=rss") %>
+	<% @rss = RSS::Parser.parse("https://www.google.com/finance/company_news?q=#{params[:q]}&output=rss", false) %>
 	<div id ="news">
 	<ol>
 	<% count = 0 %>
 	<% @rss.items.each do |article| %>
 		<li><a href="<%= article.link %>"><%= article.title %></a></li>
-		<% @news = Nokogiri::HTML(open("#{article.link}")) %>
+		<% @news = Nokogiri::HTML(open("#{article.link}", 'User-Agent' => 'firefox')) %>
 		<%= @analyzer.get_score "#{@news.css("p")}" %>
 		<%= @analyzer.get_sentiment "#{@news.css("p")}" %>
 		<% hash = {:sentiment => "#{@analyzer.get_sentiment "#{@news.css("p")}"}"} %>
@@ -41,16 +38,12 @@ body {
 					<% count -= 1 %>	
 		<% end %>
 	<% end %>
-	<h1>Based on the sentiment in the articles above, we predict you should:</h1>
-		<% if count == 2 %>
-			<h1 style="color:orange;">WAIT!</h1>
-		<% elsif count > 2 %>
-			<h1 style="color:green">BUY NOW!</h1>
-		<% elsif count < 2 %>
-			<h1 style="color:red">SELL NOW!</h1>
+		<% if count >= 7 %>
+			<h2 style="color:orange;">High sentiment, be careful!</h2>
+		<% elsif count >= 3 && count < 7  %>
+			<h2 style="color:green">Sentiment is at a good level. It may be a good time to buy.</h2>
+		<% elsif count < 3 %>
+			<h2 style="color:red">Low sentiment. Do not buy!</h2>
 		<% end %>
 	</ol>
 	</div>
-<% else %>
-	<p>Sorry, we couldn't find your stock. Please try your search again.</p>
-<% end %>
