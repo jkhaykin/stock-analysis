@@ -8,8 +8,8 @@ require 'json'
 require 'httparty'
 require 'simple-rss'
 require 'rss'
+require 'json'
 
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE 
 
 get '/' do
 erb :index
@@ -25,3 +25,4 @@ Sentimental.threshold = 2
 
 erb :stocks
 end
+
