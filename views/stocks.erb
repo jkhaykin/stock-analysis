@@ -20,7 +20,7 @@ body {
 		<h3><%= stock.css(".ch") %></h3>
 	<% end %>
 	</div>
-	<% @rss = RSS::Parser.parse("https://www.google.com/finance/company_news?q=#{params[:q]}&output=rss", false) %>
+	<% @rss = SimpleRSS.parse open("https://www.google.com/finance/company_news?q=#{params[:q]}&output=rss") %>
 	<div id ="news">
 	<ol>
 	<% count = 0 %>

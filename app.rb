@@ -8,7 +8,6 @@ require 'json'
 require 'httparty'
 require 'simple-rss'
 require 'rss'
-require 'json'
 
 
 get '/' do
