@@ -7,7 +7,6 @@ require 'sinatra'
 require 'json'
 require 'httparty'
 require 'simple-rss'
-require 'rss'
 
 
 get '/' do
